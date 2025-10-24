@@ -1,16 +1,18 @@
+// routes/qrroutes.js
 import express from "express";
-import { generateQRApi, getInfoById, updateInfoById } from "../controller/qrcontroller.js";
+import { generateQRApi, getInfoById, updateInfoById, getAllRecords, generateLoadTicketQR, generateDisposalTicket } from "../controller/qrcontroller.js";
 
 const router = express.Router();
 
 router.post("/api/generate", generateQRApi);
-
-
-
-// Get latest info by short id (used when QR scanned)
 router.get("/api/info/:id", getInfoById);
-
-// Update info for an existing QR (partial updates allowed)
 router.put("/api/info/:id", updateInfoById);
 
-export default router  ;
+// optional history route for debugging/inspection
+router.get("/records", getAllRecords);
+
+/* Filed Monitor (Load Ticket) */
+router.post("/api/generateloadticket", generateLoadTicketQR);
+router.post("/api/generatedisposalticket", generateDisposalTicket);
+
+export default router;
