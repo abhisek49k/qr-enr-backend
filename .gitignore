@@ -1,0 +1,7 @@
+node_modules/
+qr_codes/
+package-lock.json
+.env
+Code Generator Documentation.docx/
+Views/
+db/
