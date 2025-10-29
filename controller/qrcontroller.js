@@ -4,7 +4,6 @@ import fs from "fs";
 import path from "path";
 import { query, getClient } from "../db/db.js";
 import redis from "../db/redisClient.js";
-import jwt from "jsonwebtoken";
 
 
 /* ---------- helpers ---------- */
@@ -123,24 +122,6 @@ export const generateQRApi = async (req, res) => {
       const { rows } = await clientDB.query(insertText, values);
       const record = rows[0];
 
-      // ✅ Use a JWT token as the QR payload instead of full JSON
-      const tokenPayload = {
-        id: record.id,  
-        shortId,
-        ...req.body     
-      };
-      const jwtToken = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: "30d" });
-      console.log(jwtToken, '--- JWT Token ---');
-
-      // 🧩 Create QR with token instead of JSON
-      const qrDataUrl = await QRCode.toDataURL(jwtToken);
-      const base64 = qrDataUrl.replace(/^data:image\/png;base64,/, "");
-      const dir = path.join(process.cwd(), "qr_codes");
-      ensureDir(dir);
-      const fileName = `qrcode_${shortId}.png`;
-      const filePath = path.join(dir, fileName);
-      fs.writeFileSync(filePath, base64, "base64");
-
 
       // 🧩 Build complete payload for QR encoding
       const qrPayload = {
@@ -180,13 +161,13 @@ export const generateQRApi = async (req, res) => {
       };
 
       // 🖼️ Generate QR Image
-      // const qrDataUrl = await QRCode.toDataURL(JSON.stringify(qrPayload, null, 2));
-      // const base64 = qrDataUrl.replace(/^data:image\/png;base64,/, "");
-      // const dir = path.join(process.cwd(), "qr_codes");
-      // ensureDir(dir);
-      // const fileName = `qrcode_${shortId}.png`;
-      // const filePath = path.join(dir, fileName);
-      // fs.writeFileSync(filePath, base64, "base64");
+      const qrDataUrl = await QRCode.toDataURL(JSON.stringify(qrPayload, null, 2));
+      const base64 = qrDataUrl.replace(/^data:image\/png;base64,/, "");
+      const dir = path.join(process.cwd(), "qr_codes");
+      ensureDir(dir);
+      const fileName = `qrcode_${shortId}.png`;
+      const filePath = path.join(dir, fileName);
+      fs.writeFileSync(filePath, base64, "base64");
 
       await clientDB.query(
         `UPDATE qr_records 
