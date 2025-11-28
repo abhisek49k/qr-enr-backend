@@ -1,26 +1,26 @@
 // routes/qrroutes.js
 import express from "express";
-import {
-  generateQRApi,
-  getInfoById,
-  updateInfoById,
-  getAllRecords,
-  generateLoadTicketQR,
-  generateDisposalTicket,
-} from "../controller/qrcontroller.js";
+// import {
+//   generateQRApi,
+//   getInfoById,
+//   updateInfoById,
+//   getAllRecords,
+//   generateLoadTicketQR,
+//   generateDisposalTicket,
+// } from "../controller/qrcontroller.js";
 
 const router = express.Router();
 
-router.post("/api/generate", generateQRApi);
-router.get("/api/info/:id", getInfoById);
-router.put("/api/info/:id", updateInfoById);
+// router.post("/api/generate", generateQRApi);
+// router.get("/api/info/:id", getInfoById);
+// router.put("/api/info/:id", updateInfoById);
 
-// optional history route for debugging/inspection
-router.get("/records", getAllRecords);
+// // optional history route for debugging/inspection
+// router.get("/records", getAllRecords);
 
-/* Filed Monitor (Load Ticket) */
-router.post("/api/generateloadticket", generateLoadTicketQR);
-router.post("/api/generatedisposalticket", generateDisposalTicket);
+// /* Filed Monitor (Load Ticket) */
+// router.post("/api/generateloadticket", generateLoadTicketQR);
+// router.post("/api/generatedisposalticket", generateDisposalTicket);
 
 router.get("/api/schema/truck-cert", async (req, res) => {
   res.json({
@@ -1995,5 +1995,267 @@ router.get("/api/schema/truck-cert", async (req, res) => {
     ],
   });
 });
+
+router.get('/api/schema/field-monitor', async (req, res) => {
+  router.get('/api/schema/field-monitor', async (req, res) => {
+    res.json({
+      formId: "field-monitor-form-v1",
+      title: "Field Monitor Form",
+      version: 1.0,
+      createdAt: "2025-11-10T10:00:00Z",
+      updatedAt: "2025-11-10T20:00:00Z",
+      types: {
+        // -----------------------------------------------------
+        // 1️⃣ VEGETATIVE
+        // -----------------------------------------------------
+        Vegetative: {
+          label: "Vegetative",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 2️⃣ C&D
+        // -----------------------------------------------------
+        CD: {
+          label: "C&D",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+
+            // Additional field for C&D
+            { id: "pass_status", label: "Pass", type: "dropdown" },
+
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 3️⃣ MIXED (same as C&D)
+        // -----------------------------------------------------
+        Mixed: {
+          label: "Mixed",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+            { id: "pass_status", label: "Pass", type: "dropdown" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 4️⃣ DEMO
+        // -----------------------------------------------------
+        Demo: {
+          label: "Demo",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+
+            { id: "roe_required", label: "ROE Required", type: "toggle" },
+            { id: "roe_reason", label: "ROE Reason", type: "text" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 5️⃣ WHITE GOOD HAUL (same as C&D)
+        // -----------------------------------------------------
+        WhiteGoodHaul: {
+          label: "White Good Haul",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+            { id: "pass_status", label: "Pass", type: "dropdown" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 6️⃣ LEANERS
+        // -----------------------------------------------------
+        Leaners: {
+          label: "Leaners",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+
+            { id: "diameter", label: "Diameter", type: "number" },
+            { id: "hazard_type", label: "Hazard Type", type: "dropdown" },
+            { id: "stump_extraction_required", label: "Stump Extraction Required", type: "toggle" },
+            { id: "roe_required", label: "ROE Required", type: "toggle" },
+            { id: "roe_reason", label: "ROE Reason", type: "text" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 7️⃣ HANGERS (same as Demo)
+        // -----------------------------------------------------
+        Hangers: {
+          label: "Hangers",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+
+            { id: "roe_required", label: "ROE Required", type: "toggle" },
+            { id: "roe_reason", label: "ROE Reason", type: "text" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 8️⃣ STUMP EXTRACTION (same as Leaners)
+        // -----------------------------------------------------
+        StumpExtraction: {
+          label: "Stump Extraction",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+
+            { id: "diameter", label: "Diameter", type: "number" },
+            { id: "hazard_type", label: "Hazard Type", type: "dropdown" },
+            { id: "stump_extraction_required", label: "Stump Extraction Required", type: "toggle" },
+            { id: "roe_required", label: "ROE Required", type: "toggle" },
+            { id: "roe_reason", label: "ROE Reason", type: "text" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 9️⃣ STUMP HAUL
+        // -----------------------------------------------------
+        StumpHaul: {
+          label: "Stump Haul",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+
+            { id: "diameter", label: "Diameter", type: "number" },
+
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 🔟 HAUL OUT (same as Vegetative)
+        // -----------------------------------------------------
+        HaulOut: {
+          label: "Haul Out",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "address", label: "Address", type: "text" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "site_directed_to", label: "Site Directed To", type: "dropdown" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 1️⃣1️⃣ VEHICLES
+        // -----------------------------------------------------
+        Vehicles: {
+          label: "Vehicles",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "vin_hin", label: "VIN / HIN", type: "text" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 1️⃣2️⃣ VESSELS
+        // -----------------------------------------------------
+        Vessels: {
+          label: "Vessels",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "diameter", label: "Diameter", type: "number" },
+            { id: "length", label: "Length", type: "number" },
+            { id: "vin_hin", label: "VIN / HIN", type: "text" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 1️⃣3️⃣ HHW
+        // -----------------------------------------------------
+        HHW: {
+          label: "HHW",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "pass_status", label: "Pass", type: "dropdown" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        },
+
+        // -----------------------------------------------------
+        // 1️⃣4️⃣ E-WASTE (same as HHW)
+        // -----------------------------------------------------
+        EWaste: {
+          label: "E-Waste",
+          fields: [
+            { id: "lat_long", label: "Lat / Long", type: "location" },
+            { id: "truck_number", label: "Truck Number", type: "scan" },
+            { id: "pass_status", label: "Pass", type: "dropdown" },
+            { id: "photos", label: "Photos", type: "imageUpload" },
+            { id: "field_monitor_notes", label: "Field Monitor Notes", type: "textarea" }
+          ]
+        }
+      }
+    });
+  });
+
+})
+
+router.get('/api/schema/site-monitor', async (req, res) => {
+  res.json({
+    formId: "site-monitor-form-v1",
+    title: "Site Monitor Form",
+    version: 1.0,
+    createdAt: "2025-11-10T10:00:00Z",
+    updatedAt: "2025-11-10T20:00:00Z",
+    totalSections: 10,
+    sections: [
+      {
+
+      }
+    ]
+  })
+})
 
 export default router;
